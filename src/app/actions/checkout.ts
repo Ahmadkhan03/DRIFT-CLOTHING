@@ -19,7 +19,7 @@ const lineSchema = z.object({
 
 const orderSchema = z.object({
   email: z.email("Enter a valid email address.").max(200),
-  phone: z.string().max(30),
+  phone: z.string().max(30).refine((v) => normalizePhone(v) !== null, "Enter a valid mobile number, e.g. 0300 1234567."),
   fullName: z.string().trim().min(3, "Enter your full name.").max(100),
   address1: z.string().trim().min(5, "Enter your street address.").max(200),
   address2: z.string().trim().max(200).optional().default(""),
@@ -90,8 +90,7 @@ export async function placeOrder(input: PlaceOrderInput): Promise<PlaceOrderResu
   }
   const data = parsed.data;
 
-  const phone = normalizePhone(data.phone);
-  if (!phone) return { ok: false, message: "Please check the highlighted fields.", fieldErrors: { phone: "Enter a valid mobile number, e.g. 0300 1234567." } };
+  const phone = normalizePhone(data.phone)!;
 
   const db = getDb();
   if (!db) return { ok: false, message: NOT_CONFIGURED };

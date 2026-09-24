@@ -11,6 +11,21 @@ npm run dev
 
 Open http://localhost:3000.
 
+## Connect the database (Supabase)
+
+1. Create a free project at https://supabase.com (region: closest to Pakistan, e.g. Singapore or Mumbai).
+2. In the dashboard open **SQL Editor → New query**, paste the contents of `supabase/migrations/0001_orders.sql` and click **Run**.
+3. Copy `.env.example` to `.env.local` and fill in:
+   - `NEXT_PUBLIC_SUPABASE_URL`: Project Settings → API → Project URL
+   - `SUPABASE_SECRET_KEY`: Project Settings → API Keys → **secret** key (keep this private, never commit it)
+4. Restart `npm run dev`. Checkout, order tracking and newsletter signups now save to Supabase.
+
+Orders appear in Supabase → Table Editor → `orders` until the admin panel is built.
+
+### Order confirmation emails (optional)
+
+Create an account at https://resend.com, verify your domain, then set `RESEND_API_KEY` and `EMAIL_FROM` in `.env.local`. Without them, orders still work and emails are skipped.
+
 ## Where things live
 
 | Path | What |
@@ -22,6 +37,10 @@ Open http://localhost:3000.
 | `src/components/home/` | Home page sections |
 | `src/components/product/` | Product card and product page |
 | `src/components/shop/` | Shop listing with filters and sorting |
+| `src/components/checkout/` | Checkout form and order summary |
+| `src/app/actions/` | Server actions: place order, discount codes, newsletter, tracking |
+| `src/lib/supabase/server.ts` | Server-only Supabase client |
+| `supabase/migrations/` | Database schema |
 
 ### Swapping in real content
 
@@ -32,7 +51,8 @@ Open http://localhost:3000.
 
 1. ~~Design system and home page~~ ✅
 2. ~~Shop, product page, cart drawer, newsletter popup~~ ✅ (front-end only, placeholder data)
-3. Checkout: Cash on Delivery, card and wallet payments (Safepay / PayFast, JazzCash, Easypaisa), order creation and confirmation emails
+3. ~~Checkout with Cash on Delivery, orders in Supabase, confirmation page, order tracking, confirmation emails~~ ✅
+   - Next: Safepay (card, JazzCash, Easypaisa)
 4. Admin and CRM: orders, products and inventory, customers, discount codes, newsletter subscribers, abandoned carts
 5. Accounts, wishlist, order tracking, reviews, search, SEO and analytics
 6. Testing, performance pass and launch
