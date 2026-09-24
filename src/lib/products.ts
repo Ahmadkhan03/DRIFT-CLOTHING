@@ -101,7 +101,7 @@ export const PRODUCTS: Product[] = [
     category: "hoodies",
     price: 9490,
     colour: "Olive",
-    images: [img("1565978771542-0db9ab9ad3de"), img("1610582144787-eda2e6f293b4")],
+    images: [img("1565978771542-0db9ab9ad3de"), img("1614214191247-5b2d3a734f1b")],
     sizes: SIZES,
     badge: "New",
     description: "A heavyweight hoodie with a utility edge. Oversized hood and a hidden zip pocket.",
@@ -201,7 +201,7 @@ export const PRODUCTS: Product[] = [
     category: "jackets",
     price: 11990,
     colour: "Black",
-    images: [img("1586231912972-d0970f9ce787"), img("1576775068668-c147f14c36f7")],
+    images: [img("1586231912972-d0970f9ce787"), img("1559038267-f24e6f9698b1")],
     sizes: SIZES,
     soldOut: ["XS"],
     description: "Clean, minimal zip-through in a technical twill. Water resistant and easy to wear.",
@@ -210,7 +210,7 @@ export const PRODUCTS: Product[] = [
 ];
 
 export const EDITORIAL = {
-  hero: img("1610582144787-eda2e6f293b4"),
+  hero: img("1576775068668-c147f14c36f7"),
   campaignA: img("1559697242-a465f2578a95"),
   campaignB: img("1559697242-7c922c6198c6"),
   alley: img("1778871752862-c8f32e5f80b0"),

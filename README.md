@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DRIFT — Streetwear Store
 
-## Getting Started
+Premium men's / unisex streetwear store for Pakistan. Built with Next.js 16, Tailwind CSS 4, Motion and Lenis.
 
-First, run the development server:
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Where things live
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Path | What |
+| --- | --- |
+| `src/lib/products.ts` | Product catalogue (placeholder data + images), categories, price formatting |
+| `src/lib/cart-store.ts` | Cart state (saved in the browser) |
+| `src/app/globals.css` | Design tokens: colours, fonts, grain, marquee, preloader |
+| `src/components/layout/` | Announcement bar, header + mega menu, cart drawer, newsletter popup, preloader, footer |
+| `src/components/home/` | Home page sections |
+| `src/components/product/` | Product card and product page |
+| `src/components/shop/` | Shop listing with filters and sorting |
 
-## Learn More
+### Swapping in real content
 
-To learn more about Next.js, take a look at the following resources:
+- **Logo:** replace the `Drift` wordmark in `src/components/layout/Header.tsx` (and the footer/preloader).
+- **Products and photos:** edit `src/lib/products.ts`. Images are Unsplash placeholders for now; later they will come from the admin panel.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Roadmap
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. ~~Design system and home page~~ ✅
+2. ~~Shop, product page, cart drawer, newsletter popup~~ ✅ (front-end only, placeholder data)
+3. Checkout: Cash on Delivery, card and wallet payments (Safepay / PayFast, JazzCash, Easypaisa), order creation and confirmation emails
+4. Admin and CRM: orders, products and inventory, customers, discount codes, newsletter subscribers, abandoned carts
+5. Accounts, wishlist, order tracking, reviews, search, SEO and analytics
+6. Testing, performance pass and launch

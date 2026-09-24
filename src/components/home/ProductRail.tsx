@@ -33,8 +33,8 @@ export function ProductRail({ title, eyebrow }: { title: string; eyebrow: string
           <p className="label text-maroon">{eyebrow}</p>
           <h2 className="font-display mt-2 text-6xl font-black uppercase leading-[0.85] md:text-8xl">{title}</h2>
         </Reveal>
-        <div className="flex items-center gap-6">
-          <div className="flex gap-1" role="tablist">
+        <div className="flex max-w-full items-center gap-6">
+          <div className="no-scrollbar flex gap-1 overflow-x-auto" role="tablist">
             {TABS.map((t) => (
               <button
                 key={t.key}

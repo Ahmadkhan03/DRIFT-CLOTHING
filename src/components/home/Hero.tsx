@@ -6,6 +6,7 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { EDITORIAL } from "@/lib/products";
 import { SplitText } from "@/components/motion/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
+import { introDelay } from "@/components/layout/Preloader";
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -13,6 +14,7 @@ export function Hero() {
   const scale = useTransform(scrollYProgress, [0, 1], [1.05, 1.25]);
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const fade = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const start = introDelay(2.1);
 
   return (
     <section ref={ref} className="relative h-[calc(100svh-36px)] min-h-[560px] overflow-hidden bg-ink text-bone">
@@ -23,7 +25,7 @@ export function Hero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[50%_35%]"
+          className="object-cover object-[60%_30%]"
         />
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-ink/30" />
@@ -33,7 +35,7 @@ export function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.2, duration: 0.8 }}
+          transition={{ delay: start + 0.1, duration: 0.8 }}
           className="label mb-4 text-bone/80"
         >
           Collection 01 — Men / Unisex
@@ -41,14 +43,14 @@ export function Hero() {
         <SplitText
           as="h1"
           animateOnMount
-          delay={2.1}
+          delay={start}
           text="Built for the drift"
           className="font-display max-w-5xl text-[18vw] font-black uppercase leading-[0.82] md:text-[11vw]"
         />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.6, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ delay: start + 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="mt-8 flex flex-wrap items-center gap-3"
         >
           <ButtonLink href="/shop" variant="light">

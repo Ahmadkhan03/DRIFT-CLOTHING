@@ -45,6 +45,7 @@ body {
   color: var(--ink);
   font-family: var(--font-inter-tight), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
 }
 
 ::selection {
@@ -86,6 +87,41 @@ body {
   40% { transform: translate(3%, -6%); }
   60% { transform: translate(-7%, 2%); }
   80% { transform: translate(6%, 5%); }
+}
+
+/* Preloader: counts 000 → 100, then wipes up. No JS required. */
+@property --intro-n {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+.preloader {
+  animation: preloader-out 0.9s cubic-bezier(0.76, 0, 0.24, 1) 2s forwards;
+}
+.preloader-word {
+  transform: translateY(100%);
+  animation: rise 1s var(--ease-drift) 0.1s forwards;
+}
+.preloader-count {
+  counter-reset: intro var(--intro-n);
+  animation: intro-count 1.6s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+.preloader-count::after {
+  content: counter(intro, decimal-leading-zero);
+}
+html[data-intro="skip"] .preloader {
+  display: none;
+}
+
+@keyframes preloader-out {
+  to { clip-path: inset(0 0 100% 0); visibility: hidden; }
+}
+@keyframes rise {
+  to { transform: translateY(0); }
+}
+@keyframes intro-count {
+  to { --intro-n: 100; }
 }
 
 @keyframes marquee {
