@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type FormEvent } from "react";
+import { useState, useTransition, type FormEvent } from "react";
+import { subscribe } from "@/app/actions/newsletter";
 import { ArrowRight } from "lucide-react";
 
 const COLUMNS = [
@@ -38,11 +39,17 @@ const COLUMNS = [
 export function Footer() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    // TODO(phase 5): wire to newsletter API
-    setSent(true);
+    setError(null);
+    startTransition(async () => {
+      const res = await subscribe(email, "footer");
+      if (res.ok) setSent(true);
+      else setError(res.message);
+    });
   };
 
   return (
@@ -67,11 +74,12 @@ export function Footer() {
                 placeholder="Your email"
                 className="h-12 flex-1 bg-transparent text-sm outline-none placeholder:text-bone/50"
               />
-              <button aria-label="Subscribe" className="group px-2">
+              <button aria-label="Subscribe" disabled={pending} className="group px-2 disabled:opacity-40">
                 <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
               </button>
             </form>
           )}
+          {error && <p className="mt-2 text-xs text-blush">{error}</p>}
         </div>
 
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">

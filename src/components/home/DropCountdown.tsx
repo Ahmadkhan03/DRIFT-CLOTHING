@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, useTransition, type FormEvent } from "react";
+import { subscribe } from "@/app/actions/newsletter";
 import { motion } from "motion/react";
 import { EDITORIAL } from "@/lib/products";
 import { Button } from "@/components/ui/Button";
@@ -24,6 +25,8 @@ export function DropCountdown() {
   const [time, setTime] = useState<ReturnType<typeof remaining> | null>(null);
   const [email, setEmail] = useState("");
   const [joined, setJoined] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
 
   useEffect(() => {
     const update = () => setTime(remaining(DROP_DATE));
@@ -34,8 +37,12 @@ export function DropCountdown() {
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    // TODO(phase 5): save to waitlist
-    setJoined(true);
+    setError(null);
+    startTransition(async () => {
+      const res = await subscribe(email, "drop-waitlist");
+      if (res.ok) setJoined(true);
+      else setError(res.message);
+    });
   };
 
   return (
@@ -89,11 +96,12 @@ export function DropCountdown() {
               placeholder="Email for early access"
               className="h-12 flex-1 border border-bone/30 bg-transparent px-4 text-sm outline-none placeholder:text-bone/50 focus:border-bone"
             />
-            <Button type="submit" variant="light">
-              Notify me
+            <Button type="submit" variant="light" disabled={pending}>
+              {pending ? "Joining…" : "Notify me"}
             </Button>
           </form>
         )}
+        {error && <p className="text-xs text-blush">{error}</p>}
       </div>
     </section>
   );

@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, useTransition, type FormEvent } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { X } from "lucide-react";
 import { EDITORIAL } from "@/lib/products";
 import { Button } from "@/components/ui/Button";
+import { subscribe } from "@/app/actions/newsletter";
 
 const STORAGE_KEY = "drift-newsletter";
 const DELAY_MS = 9000;
@@ -28,10 +30,15 @@ export function NewsletterPopup() {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+  const pathname = usePathname();
+  // Never interrupt checkout or order pages
+  const suppressed = pathname.startsWith("/checkout") || pathname.startsWith("/order");
 
   // Show after a delay, or when the cursor leaves towards the browser chrome.
   useEffect(() => {
-    if (read()) return;
+    if (read() || suppressed) return;
     const show = () => setOpen(true);
     const timer = setTimeout(show, DELAY_MS);
     const onLeave = (e: MouseEvent) => e.clientY <= 0 && show();
@@ -40,7 +47,7 @@ export function NewsletterPopup() {
       clearTimeout(timer);
       document.removeEventListener("mouseleave", onLeave);
     };
-  }, []);
+  }, [suppressed]);
 
   const dismiss = () => {
     setOpen(false);
@@ -49,14 +56,18 @@ export function NewsletterPopup() {
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    // TODO(phase 5): POST to /api/newsletter and issue a unique one-time code.
-    setDone(true);
-    remember("subscribed");
+    setError(null);
+    startTransition(async () => {
+      const res = await subscribe(email, "popup");
+      if (!res.ok) return setError(res.message);
+      setDone(true);
+      remember("subscribed");
+    });
   };
 
   return (
     <AnimatePresence>
-      {open && (
+      {open && !suppressed && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -108,9 +119,10 @@ export function NewsletterPopup() {
                         placeholder="Email address"
                         className="h-12 border border-line bg-paper px-4 text-sm outline-none transition-colors focus:border-maroon"
                       />
-                      <Button type="submit" variant="maroon">
-                        Unlock 10% off
+                      <Button type="submit" variant="maroon" disabled={pending}>
+                        {pending ? "Joining…" : "Unlock 10% off"}
                       </Button>
+                      {error && <p className="text-xs text-maroon-bright">{error}</p>}
                     </form>
                     <button onClick={dismiss} className="mt-4 text-xs text-muted underline-offset-4 hover:underline">
                       No thanks, I&apos;ll pay full price
