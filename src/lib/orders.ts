@@ -1,7 +1,9 @@
 import "server-only";
 import { getDb } from "@/lib/supabase/server";
 
-export type OrderStatus = "pending" | "confirmed" | "packed" | "shipped" | "delivered" | "cancelled" | "returned";
+import type { OrderStatus } from "@/lib/order-status";
+
+export type { OrderStatus };
 
 export type OrderItem = {
   product_slug: string;
